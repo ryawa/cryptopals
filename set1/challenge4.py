@@ -1,15 +1,15 @@
 import crypto
 
-best = ""
-best_score = 0
+best = ("", 0)
 with open("4.txt", "r") as f:
     while True:
-        s = f.readline().rstrip("\n")
-        if not s:
+        line = f.readline().rstrip("\n")
+        if not line:
             break
-        guess, key = crypto.crack_xor(crypto.decode_hex(s))
+        c = crypto.decode_hex(line)
+        key = crypto.crack_xor(c)
+        guess = crypto.xorcrypt(c, key)
         score = crypto.score(guess)
-        if best == "" or score > best_score:
-            best = guess
-            best_score = score
-print(best)
+        if best[0] == "" or score > best[1]:
+            best = (guess, score)
+print(best[0])

@@ -6,19 +6,16 @@ def xorcrypt(input: bytes, key: bytes) -> bytes:
         result.append(input[i] ^ key[i % len(key)])
     return bytes(result)
 
-def crack_xor(b: bytes) -> tuple[bytes, int]:
-    best = b""
-    best_key = -1
-    best_score = 0
-    for i in range(256):
-        guess = bytearray()
-        for byte in b:
-            c = byte ^ i
-            guess.append(c)
-        guess = bytes(guess)
+def crack_xor(b: bytes) -> bytes:
+    # key, score
+    best = (None, 0)
+    for key in range(256):
+        # Need [] to prevent bytes(0) from being empty
+        key = bytes([key])
+        guess = xorcrypt(b, key)
         score = score_fn(guess)
-        if best == b"" or score > best_score:
-            best = guess
-            best_key = i
-            best_score = score
-    return best, best_key
+        if best[0] == None or score > best[1]:
+            best = (key, score)
+    # The best key can never be None
+    assert best[0]
+    return best[0]
