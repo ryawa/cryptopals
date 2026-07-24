@@ -1,5 +1,3 @@
-__all__ = ["decode_hex", "encode_base64"]
-
 # Equivalent to bytes.fromhex()
 def decode_hex(hex_str: str) -> bytes:
     if len(hex_str) % 2 != 0:
@@ -14,10 +12,19 @@ def decode_hex(hex_str: str) -> bytes:
         result.append(digits[hex_str[i]]*16 + digits[hex_str[i+1]])
     return bytes(result)
 
+def encode_hex(b: bytes) -> str:
+    digits = "0123456789abcdef"
+    result = ""
+    for byte in b:
+        d1 = (byte >> 4) & 0b1111
+        d2 = (byte >> 0) & 0b1111
+        result += digits[d1] + digits[d2]
+    return result
+
 # Encode bytes to base64 string without padding
 def encode_base64(b: bytes) -> str:
-    result = ""
     digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    result = ""
     for i in range(0, len(b), 3):
         chunk = b[i:i+3]
         # If len(b) is not a multiple of 3, add either 1 or 2 bytes of padding to get 3 bytes for the last chunk
