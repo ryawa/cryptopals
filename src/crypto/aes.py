@@ -4,14 +4,14 @@ from .xor import xorcrypt
 
 
 # TODO: rewrite this from scratch
-def decrypt_ebc(ct: bytes, key: bytes) -> bytes:
+def decrypt_ecb(ct: bytes, key: bytes) -> bytes:
     cipher = Cipher(algorithms.AES128(key), modes.ECB())
     decryptor = cipher.decryptor()
     pt = decryptor.update(ct)
     pt += decryptor.finalize()
     return pt
 
-def encrypt_ebc(pt: bytes, key: bytes) -> bytes:
+def encrypt_ecb(pt: bytes, key: bytes) -> bytes:
     cipher = Cipher(algorithms.AES128(key), modes.ECB())
     encryptor = cipher.encryptor()
     ct = encryptor.update(pt)
@@ -23,7 +23,7 @@ def decrypt_cbc(ct: bytes, key: bytes, iv: bytes) -> bytes:
 
     pt = bytearray()
     for i in range(0, len(ct), 16):
-        pt_block = decrypt_ebc(ct[i:i+16], key)
+        pt_block = decrypt_ecb(ct[i:i+16], key)
         if i == 0:
             prev_ct_block = iv
         else:
@@ -41,5 +41,5 @@ def encrypt_cbc(pt: bytes, key: bytes, iv: bytes) -> bytes:
         else:
             prev_ct_block = bytes(ct[i-16:i])
         pt_block = xorcrypt(pt[i:i+16], prev_ct_block)
-        ct.extend(encrypt_ebc(pt_block, key))
+        ct.extend(encrypt_ecb(pt_block, key))
     return bytes(ct)
