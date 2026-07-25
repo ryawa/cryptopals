@@ -115,7 +115,9 @@ def score(s: bytes, freq: dict[str, float]=LETTER_FREQ) -> float:
     return result
 
 def hamming_dist(a: bytes, b: bytes) -> int:
-    assert len(a) == len(b)
+    if len(a) != len(b):
+        raise ValueError("Inputs must have the same length")
+
     dist = 0
     for i in range(len(a)):
         dist += (a[i] ^ b[i]).bit_count()

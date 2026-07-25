@@ -19,7 +19,8 @@ def encrypt_ecb(pt: bytes, key: bytes) -> bytes:
     return ct
 
 def decrypt_cbc(ct: bytes, key: bytes, iv: bytes) -> bytes:
-    assert len(ct) % 16 == 0
+    if len(ct) % 16 != 0:
+        raise ValueError("Input must be padded to block size of 16 bytes")
 
     pt = bytearray()
     for i in range(0, len(ct), 16):
@@ -32,7 +33,8 @@ def decrypt_cbc(ct: bytes, key: bytes, iv: bytes) -> bytes:
     return bytes(pt)
 
 def encrypt_cbc(pt: bytes, key: bytes, iv: bytes) -> bytes:
-    assert len(pt) % 16 == 0
+    if len(pt) % 16 != 0:
+        raise ValueError("Input must be padded to block size of 16 bytes")
 
     ct = bytearray()
     for i in range(0, len(pt), 16):
