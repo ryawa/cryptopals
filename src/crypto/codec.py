@@ -7,7 +7,7 @@ def decode_hex(hex_str: str) -> bytes:
         raise ValueError("Input must have even length")
     lookup = { char: digit for digit, char in enumerate(HEX_DIGITS) }
     result = bytearray()
-    for i in range(0, len(hex_str) - 1, 2):
+    for i in range(0, len(hex_str), 2):
         result.append(lookup[hex_str[i]]*16 + lookup[hex_str[i+1]])
     return bytes(result)
 

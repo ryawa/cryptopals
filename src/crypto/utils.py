@@ -1,5 +1,3 @@
-from math import log10
-
 # From https://www.maltron.com/character-usage-by-percentage.html
 LETTER_FREQ: dict[str, float] = {
     " ": 0.17460,
@@ -119,4 +117,3 @@ def hamming_dist(a: bytes, b: bytes) -> int:
     for i in range(len(a)):
         dist += (a[i] ^ b[i]).bit_count()
     return dist
-
